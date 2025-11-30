@@ -1,0 +1,2 @@
+- dans le readme on dit conda env create -f environment.yml alors que le fichier s'appelle env.yml
+- les noms des packages sous la forme bottleneck=1.4.2=py310hbda83bc_0 sont adaptés à mac et pas windows

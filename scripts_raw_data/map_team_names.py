@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from io import StringIO
 from tqdm import tqdm
 from typing import Set, Dict
-
+from curl_cffi import requests
 
 def build_team_abbreviation_mapping(data_dir: str="raw_player_csv", 
                                     output_csv: str="team_id_to_name.csv") -> None:
@@ -38,7 +38,7 @@ def build_team_abbreviation_mapping(data_dir: str="raw_player_csv",
 
     # Scrape Basketball Reference for all team abbreviation ↔ name mappings
     url = "https://www.basketball-reference.com/teams/"
-    response = requests.get(url)
+    response = requests.get(url, impersonate="chrome110")
     response.raise_for_status()
     soup = BeautifulSoup(response.text, "html.parser")
 

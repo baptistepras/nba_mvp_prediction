@@ -3,6 +3,9 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup, Comment
 from io import StringIO
+import argparse
+from curl_cffi import requests
+
 
 # If you encounter the error:
 # [ERROR] Failed for season XXXX: 429 Client Error: Too Many Requests for url
@@ -40,8 +43,9 @@ def download_season_stats(start_year: int=1956, end_year: int=2025,
             print(f"[SKIP] Skipping season {year}, file already exists.")
             continue    
 
+        
         try:
-            response = requests.get(url)
+            response = requests.get(url, impersonate="chrome110")
             response.raise_for_status()
 
             # Parse the HTML table using pandas
@@ -167,7 +171,7 @@ if __name__ == "__main__":
 
     # Run
     print()
-    print(f"[INFO] Downloading '{args.what}' from {year_start} to {year_end}...\n")
+    #print(f"[INFO] Downloading '{args.what}' from {year_start} to {year_end}...\n")
 
     download_season_stats(year_start, year_end)
     download_expanded_standings(year_start, year_end)
