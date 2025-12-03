@@ -16,6 +16,22 @@ MIN_YEAR = 1956
 MAX_YEAR = 2025
 
 
+from train_models import load_dataset as original_load_dataset
+import train_models
+
+_data_cache = {}
+
+def load_dataset_cached(dataset_dir, year):
+    key = (dataset_dir, year)
+    if key not in _data_cache:
+        _data_cache[key] = original_load_dataset(dataset_dir, year)
+    return _data_cache[key]
+
+# patch global
+train_models.load_dataset = load_dataset_cached
+
+
+
 def greedy_backward_rfe(model_class, dataset_dir, pipeline_name, fixed_params,
                         output_dir, year_start, year_end, patience=3):
     """
