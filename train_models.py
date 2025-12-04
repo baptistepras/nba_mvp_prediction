@@ -37,12 +37,18 @@ PIPELINE_GROUPS = {
 # Predefined selected feature indices (based on RFE/greedy results)
 SELECTED_FEATURES = {
     "logreg": {
-        "selectedStats_from1980": ["Team Overall", "AST", "PTS"], 
+        "selectedStats_from1980": ["Team Overall", "G", "MP", "FGA", "FG%", "3P", "FT", "FT%", "ORB", "DRB", "BLK", "PF", "AST"], 
         "selectedStats_from1956": ["Team Overall", "FT%", "TRB", "AST", "PTS", "POS_SF"],
         "allStats_from1980": ["Team Overall", "G", "MP", "FG", "FG%", "2P", "2P%", "eFG%", "FT", "FTA", "FT%", "ORB", "DRB", 
                               "STL", "BLK", "TOV", "PF", "PTS", "POS_C", "POS_PF", "POS_SF"],
         "allStats_from1956": ["Team Overall", "G", "FG", "FT", "FTA", "TRB", "AST", "PF", "POS_PF", "POS_SF", "POS_SG"]
     },
+    "xgb": {
+        "allStats_from1980": ["Team Overall", "PTS", "TOV", "GS", "MP", "2PA", "3PA", "FT"] 
+    },
+    "rf" : {
+        "selectedStats_from1980" : ["2P", "Team Overall", "PTS", "G", "TOV", "FT%", "PF"]
+    }
 }
 
 # Models
@@ -214,7 +220,7 @@ def evaluate_model(model: Any, X: np.ndarray, y: np.ndarray, y_10: np.ndarray,
     results["predicted_ranking"] = predicted_ranking
 
     return results
-
+    
 
 def train_and_evaluate(dataset_dir: str, year: int, output_model_dir: str, 
                        model_class: Any, model_name: str, fixed_params: dict,

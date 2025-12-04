@@ -1,0 +1,2 @@
+top_1_hit_rate,top_3_hit_rate,top_5_hit_rate,top_10_hit_rate,precision_at_1_topk,precision_at_3_topk,precision_at_5_topk,precision_at_10_topk,mean_abs_rank_error_at_1,mean_abs_rank_error_at_3,mean_abs_rank_error_at_5,mean_abs_rank_error_at_10,true_mvp_avg_rank,true_mvp_min_rank,true_mvp_max_rank,true_mvp_correct_count,true_mvp_total
+0.6086956521739131,0.8260869565217391,0.9347826086956522,1.0,0.9782608695652174,0.9275362318840579,0.8695652173913042,0.6898550724637681,1.1304347826086956,2.1956521739130435,2.626086956521739,2.819565217391305,2.0434782608695654,1,9,28,46
