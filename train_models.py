@@ -39,15 +39,16 @@ SELECTED_FEATURES = {
     "logreg": {
         "selectedStats_from1980": ["Team Overall", "G", "MP", "FGA", "FG%", "3P", "FT", "FT%", "ORB", "DRB", "BLK", "PF", "AST"], 
         "selectedStats_from1956": ["Team Overall", "FT%", "TRB", "AST", "PTS", "POS_SF"],
-        "allStats_from1980": ["Team Overall", "G", "MP", "FG", "FG%", "2P", "2P%", "eFG%", "FT", "FTA", "FT%", "ORB", "DRB", 
-                              "STL", "BLK", "TOV", "PF", "PTS", "POS_C", "POS_PF", "POS_SF"],
+        "allStats_from1980": ["Team Overall", "G", "MP", "FGA", "FG%", "3P", "FT", "FT%", "ORB", "DRB", "BLK", "PF", "AST"],
         "allStats_from1956": ["Team Overall", "G", "FG", "FT", "FTA", "TRB", "AST", "PF", "POS_PF", "POS_SF", "POS_SG"]
     },
-    "xgb": {
-        "allStats_from1980": ["Team Overall", "PTS", "TOV", "GS", "MP", "2PA", "3PA", "FT"] 
-    },
-    "rf" : {
-        "selectedStats_from1980" : ["2P", "Team Overall", "PTS", "G", "TOV", "FT%", "PF"]
+
+    "rf": {
+        "allStats_from1980": ["2P", "Team Overall", "PTS", "G", "TOV", "FT%", "PF"]
+        },
+
+    "xgb" : {
+        "allStats_from1980" : ["Team Overall", "PTS", "TOV", "GS", "MP", "2PA", "3PA", "FT"]
     }
 }
 
@@ -513,6 +514,7 @@ if __name__ == "__main__":
         # Determine year range
         pipeline_min_year = 1956 if "1956" in pipeline_name else 1980
 
+        print(args)
         year_start = args.start
         year_end = args.end
 
