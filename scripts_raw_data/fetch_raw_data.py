@@ -15,6 +15,9 @@ from curl_cffi import requests
 #  - or disconnect and reconnect your internet to get a new IP.
 # After that, re-run the script and it should work again.
 
+#Constants
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+raw_data_dir = os.path.join(base_dir, "raw_data")
 
 def download_season_stats(start_year: int=1956, end_year: int=2025,
                           save_dir: str="raw_player_csv") -> None:
@@ -132,15 +135,13 @@ def download_expanded_standings(start_year: int=1956, end_year: int=2025,
     print(f"[DONE] Saved raw data to {save_dir}")
 
 
-if __name__ == "__main__":
+"""if __name__ == "__main__":
     # Example usage:
     # python scripts_data_process/download_raw_data.py 
     # python scripts_data_process/download_raw_data.py --start 1957
     # python scripts_data_process/download_raw_data.py --start 1980 --end 2020
     
-    # Constants
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    raw_data_dir = os.path.join(base_dir, "raw_data")
+    
 
     MIN_YEAR = 1956
     MAX_YEAR = 2025
@@ -177,4 +178,4 @@ if __name__ == "__main__":
     download_expanded_standings(year_start, year_end)
 
     print()
-    print("[INFO] All requested downloads finished.")
+    print("[INFO] All requested downloads finished.")"""

@@ -18,7 +18,7 @@ from train_models import load_dataset, evaluate_model, get_default_hyperparams, 
 from train_models import MODEL_CLASSES, SELECTED_FEATURES, base_dir, vprint
 
 # Pipelines
-pipelines = ["selectedStats_from1980", "selectedStats_from1956", "allStats_from1980", "allStats_from1956"]
+pipelines = ["allStats_from1980"]
 
 # Combos
 COMBO_PRESETS = {
@@ -373,7 +373,10 @@ if __name__ == "__main__":
         param_values = []
         for v in args.values:
             try:
-                param_values.append(float(v))
+                if np.isclose(float(v), int(float(v))):
+                    param_values.append(int(float(v)))
+                else:
+                    param_values.append(float(v))
             except ValueError:
                 if v.lower() == "none":
                     param_values.append(None)

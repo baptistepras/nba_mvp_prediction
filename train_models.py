@@ -403,8 +403,8 @@ def get_default_hyperparams(model_class: Any, dataset: str) -> dict:
         
     elif model_class == RandomForestClassifier:
         return {
-            "n_estimators": 100,
-            "max_depth": None,
+            "n_estimators": 750,
+            "max_depth": 15,
             "class_weight": None,
             "min_samples_leaf": 2,
             "random_state": 42
