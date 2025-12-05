@@ -4,6 +4,7 @@ import argparse
 import numpy as np
 import pandas as pd
 import joblib
+import inspect
 from sklearn.linear_model import LogisticRegression
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, HistGradientBoostingClassifier
@@ -17,6 +18,7 @@ vprint = print if verbose else lambda *args, **kwargs: None
 # Dir
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 base_dir = BASE_DIR
+
 
 # Pipelines
 PIPELINE_ALIASES = {
@@ -452,7 +454,7 @@ def get_default_hyperparams(model_class: Any, dataset: str) -> dict:
     return {}
  
 
-if __name__ == "__main__":
+def main(pipeline=["all1980"], model="logreg", start=1980, end=2025, verbose=False, full=False):
     # Example usage from root:
     # python train_models.py --pipeline all --model logreg
     # python train_models.py --pipeline allselected --model gb --start 1990 --end 2020
@@ -463,39 +465,20 @@ if __name__ == "__main__":
     datasets_base_dir = os.path.join(base_dir, "datasets")
     models_base_dir = os.path.join(base_dir, "models")
 
-    # Argument parser
-    parser = argparse.ArgumentParser(description="Train MVP prediction models on LOSO splits.")
-
-    parser.add_argument("--pipeline", nargs="+", default=["all"],
-                        help="Pipelines to run (ex: all1956, selected1956, selected1980, all1980, allselected, allall, allyear1980, allyear1956, all)")
-    parser.add_argument("--model", type=str, default="logreg",
-                        help=f"Model to use ({', '.join(MODEL_CLASSES.keys())}), default: logreg")
-    parser.add_argument("--start", type=int, default=MIN_YEAR,
-                        help=f"Start year (default {MIN_YEAR})")
-    parser.add_argument("--end", type=int, default=MAX_YEAR,
-                        help=f"End year (default {MAX_YEAR})")
-    parser.add_argument("--verbose", action="store_true",
-                        help="Enable verbose output")
-    parser.add_argument("--full", action="store_true",
-                    help="Use all features (ignores feature selection)")
-
-    args = parser.parse_args()
-
     # Verbose
-    verbose = args.verbose
     vprint = print if verbose else lambda *a, **kw: None
 
     # Model
-    if args.model not in MODEL_CLASSES:
-        print(f"[ERROR] Unknown model '{args.model}'. Available: {list(MODEL_CLASSES.keys())}")
+    if model not in MODEL_CLASSES:
+        print(f"[ERROR] Unknown model '{model}'. Available: {list(MODEL_CLASSES.keys())}")
         sys.exit(1)
 
-    model_class = MODEL_CLASSES[args.model]
+    model_class = MODEL_CLASSES[model]
     model_name = model_class.__name__
 
     # Pipelines to run
     pipelines_to_run = []
-    for p in args.pipeline:
+    for p in pipeline:
         if p in PIPELINE_GROUPS:
             pipelines_to_run.extend(PIPELINE_GROUPS[p])
         elif p in PIPELINE_ALIASES:
@@ -514,9 +497,12 @@ if __name__ == "__main__":
         # Determine year range
         pipeline_min_year = 1956 if "1956" in pipeline_name else 1980
 
+        frame = inspect.currentframe()
+        args = inspect.getargvalues(frame).locals
         print(args)
-        year_start = args.start
-        year_end = args.end
+        
+        year_start = start
+        year_end = end
 
         if year_start < pipeline_min_year:
             print(f"[WARN] {pipeline_key}: start {year_start} < {pipeline_min_year}, forcing to {pipeline_min_year}.")
@@ -542,10 +528,10 @@ if __name__ == "__main__":
 
         # Get feature selection
         selected_feature_names = None
-        if not args.full:
-            selected_feature_names = SELECTED_FEATURES.get(args.model, {}).get(pipeline_name, None)
+        if not full:
+            selected_feature_names = SELECTED_FEATURES.get(model, {}).get(pipeline_name, None)
             if selected_feature_names is None:
-                print(f"[WARN] No selected features found for model '{args.model}' and pipeline '{pipeline_name}', using full feature set.")
+                print(f"[WARN] No selected features found for model '{model}' and pipeline '{pipeline_name}', using full feature set.")
 
         # Run training
         global_results = []

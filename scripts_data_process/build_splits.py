@@ -26,6 +26,10 @@ PIPELINE_GROUPS = {
 MIN_YEAR = 1956
 MAX_YEAR = 2025
 
+# Set constants
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+processed_dir = os.path.join(base_dir, "processed_data")
+datasets_dir = os.path.join(base_dir, "datasets")
 
 def create_loso_splits_to_datasets(year_start: int, year_end: int, pipeline_dir: str) -> None:
     """
@@ -169,29 +173,16 @@ def check_loso_split_integrity(year_start: int, year_end: int, pipeline_dir: str
         print(f"[DONE] All LOSO splits are consistent for pipeline '{pipeline_dir}'")
 
 
-if __name__ == "__main__":
+def main(pipelines=["all1980"], start=1980, end=2025):
     # Example usage from root:
     # python scripts_data_process/build_splits.py --pipeline all
     # python scripts_data_process/build_splits.py --pipeline allselected --start 2000 --end 2020
     # python scripts_data_process/build_splits.py --pipeline selected1980 all1956 --start 1990
 
-    # Set constants
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    processed_dir = os.path.join(base_dir, "processed_data")
-    datasets_dir = os.path.join(base_dir, "datasets")
-
-    # Argparser
-    parser = argparse.ArgumentParser(description="Create LOSO splits for one or more pipelines.")
-    parser.add_argument("--pipelines", nargs="+", default=["all"],
-                        help="Pipelines to run (ex: all1956, selected1956, selected1980, all1980, allselected, allall, allyear1980, allyear1956, all)")
-    parser.add_argument("--start", type=int, default=MIN_YEAR, help=f"Start year (default {MIN_YEAR})")
-    parser.add_argument("--end", type=int, default=MAX_YEAR, help=f"End year (default {MAX_YEAR})")
-
-    args = parser.parse_args()
 
     # Resolve pipelines to run
     pipelines_to_run = []
-    for p in args.pipelines:
+    for p in pipelines:
         if p in PIPELINE_GROUPS:
             pipelines_to_run.extend(PIPELINE_GROUPS[p])
         elif p in PIPELINE_ALIASES:
@@ -210,8 +201,8 @@ if __name__ == "__main__":
         # Determine correct year range for this pipeline
         pipeline_min_year = 1956 if "1956" in pipeline_name else 1980
 
-        year_start = args.start
-        year_end = args.end
+        year_start = start
+        year_end = end
 
         if year_start < pipeline_min_year:
             print(f"[WARN] {pipeline_key}: start {year_start} < {pipeline_min_year}, forcing to {pipeline_min_year}.")

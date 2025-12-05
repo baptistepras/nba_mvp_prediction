@@ -108,22 +108,17 @@ def greedy_backward_rfe(model_class, dataset_dir, pipeline_name, fixed_params,
     plt.savefig(os.path.join(output_dir, "greedy_recall_plot.png"))
 
 
-if __name__ == "__main__":
+def main(pipelines=["all1980"], model="logreg", patience=3):
     # Example usage:
     # python hyperparameters_tuning/greedy_backward_feature_selection.py --pipeline selected1980 --model logreg
     # python hyperparameters_tuning/greedy_backward_feature_selection.py --pipeline all --model logreg --patience 5
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--pipeline", nargs="+", default=["all"], help="Pipelines to run")
-    parser.add_argument("--model", type=str, default="logreg", help="Model to use")
-    parser.add_argument("--patience", type=int, default=2, help="Early stopping patience (default=3)")
-    args = parser.parse_args()
 
-    model_class = MODEL_CLASSES[args.model]
+    model_class = MODEL_CLASSES[model]
     model_name = model_class.__name__
 
     pipelines_to_run = []
-    for p in args.pipeline:
+    for p in pipelines:
         if p in PIPELINE_GROUPS:
             pipelines_to_run.extend(PIPELINE_GROUPS[p])
         elif p in PIPELINE_ALIASES:
@@ -150,6 +145,6 @@ if __name__ == "__main__":
         fixed_params = get_default_hyperparams(model_class, pipeline_name)
 
         greedy_backward_rfe(model_class, dataset_dir, pipeline_name, fixed_params,
-                            output_dir, year_start, year_end, patience=args.patience)
+                            output_dir, year_start, year_end, patience=patience)
 
     print("\n[DONE] All greedy backward RFE runs completed.")

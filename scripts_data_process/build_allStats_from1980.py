@@ -16,6 +16,12 @@ from sklearn.impute import KNNImputer
 # It builds Data.csv (features per player), Y_top1.csv (binary label: MVP or not), 
 # Y_top10.csv (MVP-rank or -1), and Name.csv (player names), all aligned row-by-row.
 
+# Set constants
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+raw_data_dir = os.path.join(base_dir, "raw_data")
+processed_dir = os.path.join(base_dir, "processed_data")
+POS_ORDER = ["C", "PG", "PF", "SF", "SG"]
+
 
 def parse_team_overall(record: str) -> float:
     """
@@ -384,30 +390,18 @@ def check_processed_data_integrity(start_year: int=1980, end_year: int=2025,
         print("[DONE] Finished checking processed data integrity.")
 
 
-if __name__ == "__main__":
+def main(start=1980, end=2025):
     # Example usage from root:
     # python scripts_data_process/build_allStats_from1980.py
     # python scripts_data_process/build_allStats_from1980.py --start 1980 --end 2020
 
-    # Set constants
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    raw_data_dir = os.path.join(base_dir, "raw_data")
-    processed_dir = os.path.join(base_dir, "processed_data")
-    POS_ORDER = ["C", "PG", "PF", "SF", "SG"]
 
     # Set min/max allowed years for this pipeline
     MIN_YEAR = 1980
     MAX_YEAR = 2025
 
-
-    # Setup argparse
-    parser = argparse.ArgumentParser(description="Build and process the allStats_from1980 pipeline.")
-    parser.add_argument("--start", type=int, default=MIN_YEAR, help="Start year (default: {MIN_YEAR})")
-    parser.add_argument("--end", type=int, default=MAX_YEAR, help="End year (default: {MAX_YEAR})")
-
-    args = parser.parse_args()
-    year_start = args.start
-    year_end = args.end
+    year_start = start
+    year_end = end
 
     # Sanity checks
     if year_start < MIN_YEAR:

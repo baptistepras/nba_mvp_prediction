@@ -17,6 +17,11 @@ sys.path.append(BASE_DIR)
 from train_models import load_dataset, evaluate_model, get_default_hyperparams, get_feature_names
 from train_models import MODEL_CLASSES, SELECTED_FEATURES, base_dir, vprint
 
+# Constants
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+styled_pd_path = os.path.join(base_dir, "hyperparameters_tuning", "results")
+os.makedirs(styled_pd_path, exist_ok=True)
+
 # Pipelines
 pipelines = ["allStats_from1980"]
 
@@ -317,7 +322,7 @@ def sweep_hyperparameter_combinations_on_pipeline(model_class: Type[Any],
     return df_summary
 
 
-if __name__ == "__main__":
+def main(model="logreg", param="C", values=["1, 2, 3, 4, 5"], combo={}, full=False):
     # Example usage from root:
     # Sweep a single hyperparameter (example on C):
     # python hyperparameters_tuning/hyperparameters_tuner.py --model logreg --param C --values 0.01 0.1 1.0 5.0 10.0
@@ -326,52 +331,30 @@ if __name__ == "__main__":
     # Sweep hyperparameter combinations:
     # python hyperparameters_tuning/hyperparameters_tuner.py --model logreg --param solver+penalty --combo 
 
-    # Constants
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    styled_pd_path = os.path.join(base_dir, "hyperparameters_tuning", "results")
-    os.makedirs(styled_pd_path, exist_ok=True)
-
-    # Argument parser
-    parser = argparse.ArgumentParser(description="Sweep hyperparameters on MVP prediction pipelines.")
-
-    parser.add_argument("--model", type=str, required=True,
-                        help=f"Model to use ({', '.join(MODEL_CLASSES.keys())})")
-    parser.add_argument("--param", type=str, required=True,
-                        help="Name of hyperparameter to sweep")
-    parser.add_argument("--values", nargs="*",
-                        help="List of values to test (ignored if --combo is used)")
-    parser.add_argument("--combo", action="store_true",
-                        help="Use combo mode with predefined combos")
-    parser.add_argument("--full", action="store_true",
-                    help="Use all features (ignores feature selection)")
-
-    args = parser.parse_args()
 
     # Model
-    if args.model not in MODEL_CLASSES:
-        print(f"[ERROR] Unknown model '{args.model}'. Available: {list(MODEL_CLASSES.keys())}")
+    if model not in MODEL_CLASSES:
+        print(f"[ERROR] Unknown model '{model}'. Available: {list(MODEL_CLASSES.keys())}")
         sys.exit(1)
 
-    model_class = MODEL_CLASSES[args.model]
+    model_class = MODEL_CLASSES[model]
     model_name = model_class.__name__
 
-    # Param
-    param = args.param
 
     # Values
-    if args.combo:
+    if combo:
         if param not in COMBO_PRESETS:
             print(f"[ERROR] No combo preset defined for param '{param}'. Available: {list(COMBO_PRESETS.keys())}")
             sys.exit(1)
         param_combinations = COMBO_PRESETS[param]
         print(f"[INFO] Using combo preset for '{param}': {param_combinations}")
     else:
-        if args.values is None or len(args.values) == 0:
+        if values is None or len(values) == 0:
             print(f"[ERROR] You must provide --values when not using --combo.")
             sys.exit(1)
         # Try to convert values to float if possible
         param_values = []
-        for v in args.values:
+        for v in values:
             try:
                 if np.isclose(float(v), int(float(v))):
                     param_values.append(int(float(v)))
@@ -400,13 +383,13 @@ if __name__ == "__main__":
 
         # Get feature selection
         selected_feature_names = None
-        if not args.full:
-            selected_feature_names = SELECTED_FEATURES.get(args.model, {}).get(pipeline, None)
+        if not full:
+            selected_feature_names = SELECTED_FEATURES.get(model, {}).get(pipeline, None)
             if selected_feature_names is None:
-                print(f"[WARN] No selected features found for model '{args.model}' and pipeline '{pipeline}', using full feature set.")
+                print(f"[WARN] No selected features found for model '{model}' and pipeline '{pipeline}', using full feature set.")
 
         # Sweep
-        if args.combo:
+        if combo:
             df = sweep_hyperparameter_combinations_on_pipeline(model_class=model_class,
                                                                param_combinations=param_combinations,
                                                                dataset_name=pipeline,
@@ -451,4 +434,3 @@ if __name__ == "__main__":
         f.write(html_content)
 
     print()
-    print(f"[DONE] All pipelines saved to: {html_path}")

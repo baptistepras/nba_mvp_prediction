@@ -9,6 +9,10 @@ from tqdm import tqdm
 from typing import Set, Dict
 from curl_cffi import requests
 
+# Constants
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+raw_data_dir = os.path.join(base_dir, "raw_data")
+
 def build_team_abbreviation_mapping(data_dir: str="raw_player_csv", 
                                     output_csv: str="team_id_to_name.csv") -> None:
     """
@@ -260,14 +264,10 @@ def check_player_to_standings_mapping(stats_dir: str="raw_player_csv",
         print(f"[ERROR] You must resolve the missing team mappings manually before continuing.")
 
 
-if __name__ == "__main__":
+def main():
     # Example usage from root:
     # python scripts_data_process/build_team_mapping.py
-
-    # Constants
-    base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    raw_data_dir = os.path.join(base_dir, "raw_data")
-    
+  
     build_team_abbreviation_mapping()
     merge_team_mapping()
     check_missing_teams()

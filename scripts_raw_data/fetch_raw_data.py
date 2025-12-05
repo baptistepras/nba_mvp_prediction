@@ -135,30 +135,20 @@ def download_expanded_standings(start_year: int=1956, end_year: int=2025,
     print(f"[DONE] Saved raw data to {save_dir}")
 
 
-"""if __name__ == "__main__":
+def main(start=1980, end=2025):
     # Example usage:
     # python scripts_data_process/download_raw_data.py 
     # python scripts_data_process/download_raw_data.py --start 1957
     # python scripts_data_process/download_raw_data.py --start 1980 --end 2020
     
-    
 
     MIN_YEAR = 1956
     MAX_YEAR = 2025
 
-    # Argument parser
-    parser = argparse.ArgumentParser(description="Download NBA raw data from Basketball Reference.")
-
-    parser.add_argument("--start", type=int, default=MIN_YEAR,
-                        help=f"Start year (default {MIN_YEAR})")
-    parser.add_argument("--end", type=int, default=MAX_YEAR,
-                        help=f"End year (default {MAX_YEAR})")
-
-    args = parser.parse_args()
 
     # Sanity checks
-    year_start = args.start
-    year_end = args.end
+    year_start = start
+    year_end = end
 
     if year_start < MIN_YEAR:
         print(f"[ERROR] start {year_start} is below minimum allowed ({MIN_YEAR})")
@@ -178,4 +168,4 @@ def download_expanded_standings(start_year: int=1956, end_year: int=2025,
     download_expanded_standings(year_start, year_end)
 
     print()
-    print("[INFO] All requested downloads finished.")"""
+    print("[INFO] All requested downloads finished.")
