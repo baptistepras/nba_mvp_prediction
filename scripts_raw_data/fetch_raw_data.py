@@ -4,8 +4,8 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup, Comment
 from io import StringIO
-import argparse
 from curl_cffi import requests
+from train_models import MIN_YEAR, MAX_YEAR
 
 
 # If you encounter the error:
@@ -137,16 +137,6 @@ def download_expanded_standings(start_year: int=1956, end_year: int=2025,
 
 
 def main(start=1980, end=2025):
-    # Example usage:
-    # python scripts_data_process/download_raw_data.py 
-    # python scripts_data_process/download_raw_data.py --start 1957
-    # python scripts_data_process/download_raw_data.py --start 1980 --end 2020
-    
-
-    MIN_YEAR = 1956
-    MAX_YEAR = 2026
-
-
     # Sanity checks
     year_start = start
     year_end = end

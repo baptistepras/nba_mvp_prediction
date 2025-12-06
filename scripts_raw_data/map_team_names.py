@@ -265,9 +265,6 @@ def check_player_to_standings_mapping(stats_dir: str="raw_player_csv",
 
 
 def main():
-    # Example usage from root:
-    # python scripts_data_process/build_team_mapping.py
-  
     build_team_abbreviation_mapping()
     merge_team_mapping()
     check_missing_teams()

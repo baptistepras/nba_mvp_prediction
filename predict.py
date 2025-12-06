@@ -1,14 +1,15 @@
 import os
 import sys
-import argparse
 from typing import List, Dict, Any, Optional
 import numpy as np
 import pandas as pd
 import joblib
 from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, HistGradientBoostingClassifier
 from xgboost import XGBClassifier
 from lightgbm import LGBMClassifier
+from sklearn.metrics import accuracy_score
 from train_models import MIN_YEAR, MAX_YEAR, MODEL_CLASSES, PIPELINE_ALIASES, base_dir, SELECTED_FEATURES
 from train_models import get_default_hyperparams, get_feature_names
 
@@ -185,13 +186,7 @@ def train_on_single_split_and_predict(dataset_dir: str,
 
 
 def main(pipeline="all1980", model="logreg", year=2026, verbose=False):
-    # Example usage from project root:
-    # python predict_single_split.py --pipeline all1980 --model logreg --year 2026
-    # python predict_single_split.py --pipeline selected1980 --model rf --year 2026 --full
-
     datasets_base_dir: str = os.path.join(base_dir, "datasets")
-
-    
 
     # Verbose global switch
     vprint = print if verbose else (lambda *a, **kw: None)

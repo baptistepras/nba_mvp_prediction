@@ -1,6 +1,6 @@
 import os
 import subprocess
-import argparse
+from train_models import PIPELINE_GROUPS, MAX_YEAR
 
 # Configuration
 PIPELINE_SCRIPTS = {
@@ -10,37 +10,11 @@ PIPELINE_SCRIPTS = {
     "all1980": "build_allStats_from1980.py"
 }
 
-# Pipeline groups
-PIPELINE_GROUPS = {
-    "all": list(PIPELINE_SCRIPTS.keys()),
-    "allall": ["all1956", "all1980"],
-    "allyear1980": ["selected1980", "all1980"],
-    "allyear1956": ["selected1956", "all1956"],
-    "allselected": ["selected1956", "selected1980"]
-}
 
-# Limits
-MIN_YEAR = 1956
-MAX_YEAR = 2025
-
-if __name__ == "__main__":
-    # Example usage from root:
-    # python scripts_data_process/build_all_pipelines.py --pipelines all
-    # python scripts_data_process/build_all_pipelines.py --pipelines allselected --start 1985 --end 2020
-    # python scripts_data_process/build_all_pipelines.py --pipelines selected1956 all1980
-    # python scripts_data_process/build_all_pipelines.py --pipelines all1956 --start 2000
-    
-    parser = argparse.ArgumentParser(description="Run one or more build pipelines.")
-    parser.add_argument("--pipelines", nargs="+", default=["all"],
-                        help="Pipelines to run (ex: all1956, selected1956, selected1980, all1980, allselected, allall, allyear1980, allyear1956, all)")
-    parser.add_argument("--start", type=int, default=MIN_YEAR, help="Start year (default {MIN_YEAR})")
-    parser.add_argument("--end", type=int, default=MAX_YEAR, help="End year (default {MAX_YEAR})")
-
-    args = parser.parse_args()
-
+def main(pipelines=["all1980"], start=1980, end=2025):   
     # Resolve pipelines to run
     pipelines_to_run = []
-    for p in args.pipelines:
+    for p in pipelines:
         if p in PIPELINE_GROUPS:
             pipelines_to_run.extend(PIPELINE_GROUPS[p])
         elif p in PIPELINE_SCRIPTS:
@@ -59,8 +33,8 @@ if __name__ == "__main__":
         # Determine correct year range for this pipeline
         pipeline_min_year = 1956 if "1956" in pipeline else 1980
 
-        year_start = args.start
-        year_end = args.end
+        year_start = start
+        year_end = end
 
         if year_start < pipeline_min_year:
             print(f"[WARN] {pipeline}: start {year_start} < {pipeline_min_year}, forcing to {pipeline_min_year}.")

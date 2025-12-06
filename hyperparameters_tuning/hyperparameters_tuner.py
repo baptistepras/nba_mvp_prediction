@@ -1,6 +1,5 @@
 import os
 import sys
-import argparse
 import numpy as np
 import pandas as pd
 import joblib
@@ -323,15 +322,6 @@ def sweep_hyperparameter_combinations_on_pipeline(model_class: Type[Any],
 
 
 def main(model="logreg", param="C", values=["1, 2, 3, 4, 5"], combo={}, full=False):
-    # Example usage from root:
-    # Sweep a single hyperparameter (example on C):
-    # python hyperparameters_tuning/hyperparameters_tuner.py --model logreg --param C --values 0.01 0.1 1.0 5.0 10.0
-    # python hyperparameters_tuning/hyperparameters_tuner.py --model logreg --param class_weight --values None balanced
-    #
-    # Sweep hyperparameter combinations:
-    # python hyperparameters_tuning/hyperparameters_tuner.py --model logreg --param solver+penalty --combo 
-
-
     # Model
     if model not in MODEL_CLASSES:
         print(f"[ERROR] Unknown model '{model}'. Available: {list(MODEL_CLASSES.keys())}")

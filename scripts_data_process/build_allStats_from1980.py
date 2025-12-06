@@ -1,11 +1,11 @@
 import os
 import sys
-import argparse
 import pandas as pd
 import numpy as np
 from typing import List, Dict
 from tqdm import tqdm
 from sklearn.impute import KNNImputer
+from train_models import MIN_YEAR, MAX_YEAR
 
 # This pipeline (2) constructs per-season player datasets,
 # collecting all basic player statistics available since 1980
@@ -391,15 +391,6 @@ def check_processed_data_integrity(start_year: int=1980, end_year: int=2025,
 
 
 def main(start=1980, end=2025):
-    # Example usage from root:
-    # python scripts_data_process/build_allStats_from1980.py
-    # python scripts_data_process/build_allStats_from1980.py --start 1980 --end 2020
-
-
-    # Set min/max allowed years for this pipeline
-    MIN_YEAR = 1980
-    MAX_YEAR = 2026
-
     year_start = start
     year_end = end
 

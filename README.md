@@ -11,15 +11,17 @@ Multiple machine learning models are implemented and compared, with performance 
 - `scripts_raw_data/` → scripts for data download and cleaning
 - `scripts_data_process/` → scripts for dataset preparation  
 - `train_models.py` → train and evaluate different machine learning models  
-- `hyperparameters_tuning/` → scripts for hyperparameter tuning and feature selection  
-- `models/` → trained models (ignored by Git)  
-- `raw_data/`, `processed_data/` → datasets (ignored by Git)  
+- `hyperparameters_tuning/` → scripts for hyperparameter tuning and feature selection, along with results
+- `models/` → trained models (ignored by Git) and results per model 
+- `raw_data/`, `processed_data/`, `datasets` → data and datasets (ignored by Git)  
+- `images/` → images for the project
+- `env.yml` → environment for easy recreation with conda
 
 ---
 
 ## ⚙️ Installation
 
-Clone the repository and make sure you have Python 3.9+ with the required dependencies (I recommend using conda):
+Clone the repository and make sure you have Python 3.9+ with the required dependencies (we recommend using conda):
 
 `conda env create -f env.yml`
 
@@ -27,57 +29,60 @@ Clone the repository and make sure you have Python 3.9+ with the required depend
 
 ## 🚀 Usage
 
-All commands should be run **from the project root**.
+Use the project from `notebook.ipynb` by using the modules imported at the beginning of the document, by launching them with the main().
+
+See below for some examples (not exhaustive, there are many more possibilities of parameters and modules to be used).
+
+Note to future people: if you are using this project after 2026 and want to include new data,change the parameter `MAX_YEAR = 2026` in `train_models.py` before.
 
 1. **Download and preprocess raw data**  
    ```
-   python scripts_raw_data/fetch_raw_data.py
-   python scripts_raw_data/map_team_names.py
+   r.main(1980, 2025)
+   b.main()
    ```
 
 2.	**Build datasets and split into train/test**
    ```
-   python scripts_data_process/build_all_pipelines.py --pipelines all 
-   python scripts_data_process/build_splits.py --pipeline all
+   pa80.main(1980, 2025)
+   bs.main(["all1980"], 1980, 2025)
    ```
 
 3.	**Train and evaluate models**
    ```
-   python train_models.py --pipeline all --model <model_name>
+   t.main(model='logreg')
    ```
 
 Available <model_name> options:
 
-	•	logreg → Logistic Regression
+	•	logreg → Logistic Regression (Optimized)
  
-	•	rf → Random Forest
+	•	rf → Random Forest (Optimized)
  
-	•	xgb → XGBoost
+	•	xgb → XGBoost (Optimized)
  
-	•	gb → Gradient Boosting
+	•	gb → Gradient Boosting (Not Optimized)
  
-	•	histgb → Histogram-based Gradient Boosting
+	•	histgb → Histogram-based Gradient Boosting (Not Optimized)
  
-	•	lgbm → LightGBM
+	•	lgbm → LightGBM (Not Optimized)
 
 4.	**Hyperparameter tuning (optional)**
    ```
-   python hyperparameters_tuning/hyperparameters_tuner.py --model <model_name> --param <param_name> --values <values>
-   python hyperparameters_tuning/hyperparameters_tuner.py --model logreg --param C --values 0.01 0.1 1.0 5.0 10.0
+   ht.main("logreg", "C", [1, 2, 3, 4, 5], combo={}, full=False)
    ```
-
-⚠️ Logistic Regression (logreg) already comes with optimized hyperparameters.
-For the other models, tuning is recommended; you must then change the default parameters in the code.
 
 5.	**Feature selection (optional)**
    ```
-   python hyperparameters_tuning/greedy_forward_feature_selection.py --pipeline all --model <model_name>
-   python hyperparameters_tuning/greedy_backward_feature_selection.py --pipeline all --model <model_name>
-   python hyperparameters_tuning/feature_selection.py --pipeline all --model <model_name> --min <min_features_to_keep> --max <max_features_to_keep>
+   gf.main(["all1980"],  "logreg", 2)
+   gb.main(["all1980"],  "logreg", 2)
    ```
 
-⚠️ Feature selection has already been applied for Logistic Regression.
-For the other models, these scripts can be used to explore dimensionality reduction and performance improvements.
+6. **Prediction**
+   ```
+   r.main(2026, 2026)
+   pa80.main(2026, 2026)
+   bs.main(["all1980"], 1980, 2026, 2026)
+   pr.main("all1980", model="logreg", year=2026)
+   ```
 
-
-📘 Note: Example commands are included at the bottom of each script for guidance.
+To make a prediction on the current year (on any year at all), use `pr.main("all1980", model="logreg", year=2026)`.

@@ -1,6 +1,5 @@
 import os
 import sys
-import argparse
 import numpy as np
 import pandas as pd
 import joblib
@@ -454,12 +453,6 @@ def get_default_hyperparams(model_class: Any, dataset: str) -> dict:
  
 
 def main(pipeline=["all1980"], model="logreg", start=1980, end=2025, verbose=False, full=False):
-    # Example usage from root:
-    # python train_models.py --pipeline all --model logreg
-    # python train_models.py --pipeline allselected --model gb --start 1990 --end 2020
-    # python train_models.py --pipeline selected1956 --model xgb --verbose
-    # python train_models.py --pipeline all1956 --model rf --start 2000
-
     # Constants
     datasets_base_dir = os.path.join(base_dir, "datasets")
     models_base_dir = os.path.join(base_dir, "models")

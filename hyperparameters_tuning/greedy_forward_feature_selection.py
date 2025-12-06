@@ -1,6 +1,5 @@
 import os
 import sys
-import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
@@ -9,11 +8,8 @@ from sklearn.linear_model import LogisticRegression
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(BASE_DIR)
 from train_models import load_dataset, get_default_hyperparams, evaluate_model
-from train_models import PIPELINE_ALIASES, PIPELINE_GROUPS, MODEL_CLASSES
+from train_models import PIPELINE_ALIASES, PIPELINE_GROUPS, MODEL_CLASSES, MAX_YEAR
 from hyperparameters_tuning.feature_selection import compute_recall_at_1_avg
-
-MIN_YEAR = 1956
-MAX_YEAR = 2025
 
 
 def greedy_forward_selection(model_class, dataset_dir, pipeline_name, fixed_params,
@@ -91,13 +87,7 @@ def greedy_forward_selection(model_class, dataset_dir, pipeline_name, fixed_para
     plt.savefig(os.path.join(output_dir, "greedy_forward_recall_plot.png"))
 
 
-
-
 def main(pipelines=["all1980"], model="logreg", patience=3):
-    # Example usage:
-    # python hyperparameters_tuning/greedy_forward_feature_selection.py --pipeline selected1980 --model logreg
-    # python hyperparameters_tuning/greedy_forward_feature_selection.py --pipeline all --model logreg --patience 5
-
     model_class = MODEL_CLASSES[model]
     model_name = model_class.__name__
 

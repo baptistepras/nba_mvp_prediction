@@ -1,6 +1,5 @@
 import os
 import sys
-import argparse
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -11,12 +10,7 @@ from sklearn.linear_model import LogisticRegression
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(BASE_DIR)
 from train_models import load_dataset, get_default_hyperparams, evaluate_model
-from train_models import PIPELINE_ALIASES, PIPELINE_GROUPS, MODEL_CLASSES
-
-# Constants
-
-MIN_YEAR = 1956
-MAX_YEAR = 2025
+from train_models import PIPELINE_ALIASES, PIPELINE_GROUPS, MODEL_CLASSES, MAX_YEAR
 
 
 def compute_recall_at_1_avg(model_class, fixed_params, dataset_dir, start_year, end_year, feature_indices):
@@ -113,27 +107,13 @@ def custom_rfe_recall1(model_class, dataset_dir, pipeline_name, fixed_params,
     print(f"[DONE] Saved RFE recall plot to {plot_path}")
 
 
-if __name__ == "__main__":
-    # Example usage:
-    # python hyperparameters_tuning/feature_selection.py --pipeline selected1980 --model logreg --min 10 --max 14
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--pipeline", nargs="+", default=["all"],
-                        help="Pipelines to run (e.g. selected1980, all1956, allselected, etc.)")
-    parser.add_argument("--model", type=str, default="logreg",
-                        help="Model to use (e.g. logreg)")
-    parser.add_argument("--min", type=int, required=True,
-                        help="Min number of features")
-    parser.add_argument("--max", type=int, required=True,
-                        help="Max number of features")
-    args = parser.parse_args()
-
-    model_class = MODEL_CLASSES[args.model]
+def main(pipelines=["all1980"], model="logreg", min_features=1, max_features=32):
+    model_class = MODEL_CLASSES[model]
     model_name = model_class.__name__
 
     # Resolve pipelines
     pipelines_to_run = []
-    for p in args.pipeline:
+    for p in pipelines:
         if p in PIPELINE_GROUPS:
             pipelines_to_run.extend(PIPELINE_GROUPS[p])
         elif p in PIPELINE_ALIASES:
@@ -161,7 +141,7 @@ if __name__ == "__main__":
 
         custom_rfe_recall1(model_class, dataset_dir, pipeline_name,
                            fixed_params, output_dir, year_start, year_end,
-                           args.min, args.max)
+                           min_features, max_features)
 
     print()
     print("[DONE] All RFE runs completed.")

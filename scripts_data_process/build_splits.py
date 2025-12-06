@@ -4,6 +4,7 @@ import argparse
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+from train_models import PIPELINE_ALIASES, PIPELINE_GROUPS, MAX_YEAR
 
 # Configuration
 PIPELINE_ALIASES = {
@@ -22,16 +23,13 @@ PIPELINE_GROUPS = {
     "allselected": ["selected1956", "selected1980"]
 }
 
-# Limits
-MIN_YEAR = 1956
-MAX_YEAR = 2026
 
 # Set constants
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 processed_dir = os.path.join(base_dir, "processed_data")
 datasets_dir = os.path.join(base_dir, "datasets")
 
-def create_loso_splits_to_datasets(year_start: int, year_end: int, pipeline_dir: str) -> None:
+def create_loso_splits_to_datasets(year_start: int, year_end: int, pipeline_dir: str, year_target: int=None) -> None:
     """
     Creates leave-one-season-out splits from processed pipeline data.
     For each year, creates a train/ and test/ folder:
@@ -43,6 +41,7 @@ def create_loso_splits_to_datasets(year_start: int, year_end: int, pipeline_dir:
         year_start (int): First year to include.
         year_end (int): Last year to include.
         pipeline_dir (str): Path to the processed pipeline directory (e.g. "allStats_from1956").
+        year_target (int, optional): Build only for this specific year. Defaults to None.
 
     Returns:
         None
@@ -56,6 +55,8 @@ def create_loso_splits_to_datasets(year_start: int, year_end: int, pipeline_dir:
     os.makedirs(output_dir, exist_ok=True)
 
     for year in tqdm(range(year_start, year_end + 1), desc="Building LOSO splits", file=sys.stdout):
+        if year_target is not None and year != year_target:
+            continue
         try:
             year_str = str(year)
             year_output_dir = os.path.join(output_dir, year_str)
@@ -173,13 +174,7 @@ def check_loso_split_integrity(year_start: int, year_end: int, pipeline_dir: str
         print(f"[DONE] All LOSO splits are consistent for pipeline '{pipeline_dir}'")
 
 
-def main(pipelines=["all1980"], start=1980, end=2025):
-    # Example usage from root:
-    # python scripts_data_process/build_splits.py --pipeline all
-    # python scripts_data_process/build_splits.py --pipeline allselected --start 2000 --end 2020
-    # python scripts_data_process/build_splits.py --pipeline selected1980 all1956 --start 1990
-
-
+def main(pipelines=["all1980"], start=1980, end=2025, year_target=None):
     # Resolve pipelines to run
     pipelines_to_run = []
     for p in pipelines:
@@ -216,7 +211,7 @@ def main(pipelines=["all1980"], start=1980, end=2025):
 
         # Run
         print(f"[INFO] Creating LOSO splits for pipeline '{pipeline_name}' from {year_start} to {year_end}...")
-        create_loso_splits_to_datasets(year_start, year_end, pipeline_name)
+        create_loso_splits_to_datasets(year_start, year_end, pipeline_name, year_target)
 
         print(f"[INFO] Checking LOSO splits for pipeline '{pipeline_name}' from {year_start} to {year_end}...")
         check_loso_split_integrity(year_start, year_end, pipeline_name)
