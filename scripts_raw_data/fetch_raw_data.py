@@ -1,4 +1,5 @@
 import os
+import sys
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup, Comment
@@ -97,7 +98,7 @@ def download_expanded_standings(start_year: int=1956, end_year: int=2025,
             continue
 
         try:
-            res = requests.get(url)
+            res = requests.get(url, impersonate="chrome110")
             res.raise_for_status()
 
             soup = BeautifulSoup(res.text, "html.parser")
@@ -143,7 +144,7 @@ def main(start=1980, end=2025):
     
 
     MIN_YEAR = 1956
-    MAX_YEAR = 2025
+    MAX_YEAR = 2026
 
 
     # Sanity checks

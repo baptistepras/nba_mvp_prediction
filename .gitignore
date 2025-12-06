@@ -7,8 +7,6 @@
 
 # Ignore results folders
 
-# Ignore test file 
-test.py
 
 # Python standard ignores
 __pycache__/

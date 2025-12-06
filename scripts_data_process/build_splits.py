@@ -24,7 +24,7 @@ PIPELINE_GROUPS = {
 
 # Limits
 MIN_YEAR = 1956
-MAX_YEAR = 2025
+MAX_YEAR = 2026
 
 # Set constants
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))

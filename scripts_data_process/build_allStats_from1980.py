@@ -398,7 +398,7 @@ def main(start=1980, end=2025):
 
     # Set min/max allowed years for this pipeline
     MIN_YEAR = 1980
-    MAX_YEAR = 2025
+    MAX_YEAR = 2026
 
     year_start = start
     year_end = end

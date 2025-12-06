@@ -66,7 +66,7 @@ MODEL_CLASSES = {
 
 # Limits
 MIN_YEAR = 1956
-MAX_YEAR = 2025
+MAX_YEAR = 2026
 
 
 def get_feature_names(pipeline_name: str, year: int) -> List[str]:
@@ -418,7 +418,6 @@ def get_default_hyperparams(model_class: Any, dataset: str) -> dict:
             "learning_rate": 0.1,
             "max_depth": 4,
             "scale_pos_weight": 5,
-            "use_label_encoder": False,
             "eval_metric": "logloss",
             "random_state": 42
         }
@@ -497,8 +496,7 @@ def main(pipeline=["all1980"], model="logreg", start=1980, end=2025, verbose=Fal
         # Determine year range
         pipeline_min_year = 1956 if "1956" in pipeline_name else 1980
 
-        frame = inspect.currentframe()
-        args = inspect.getargvalues(frame).locals
+        args = inspect.getcallargs(main, pipeline, model, start, end, verbose, full)
         print(args)
         
         year_start = start

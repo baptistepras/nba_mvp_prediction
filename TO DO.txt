@@ -1,6 +1,0 @@
-- dans le readme on dit conda env create -f environment.yml alors que le fichier s'appelle env.yml
-- les noms des packages sous la forme bottleneck=1.4.2=py310hbda83bc_0 sont adaptés à mac et pas windows
-- faut rajouter ipykernel dans l'env mtn qu'on utilise des notebooks
--sécuriser mes fonctions "main" en mettant des valeurs par défaut partout
--check que j'ai pas laissé de coquille dans les scripts parce qu'on va surement utiliser ma version du code
--mettre plus de texte dans le notebook mdr pour mieux epliquer

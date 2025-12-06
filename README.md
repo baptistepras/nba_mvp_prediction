@@ -21,7 +21,7 @@ Multiple machine learning models are implemented and compared, with performance 
 
 Clone the repository and make sure you have Python 3.9+ with the required dependencies (I recommend using conda):
 
-`conda env create -f environment.yml`
+`conda env create -f env.yml`
 
 ---
 
@@ -31,13 +31,13 @@ All commands should be run **from the project root**.
 
 1. **Download and preprocess raw data**  
    ```
-   python scripts_data_process/download_raw_data.py
-   python scripts_data_process/build_team_mapping.py
+   python scripts_raw_data/fetch_raw_data.py
+   python scripts_raw_data/map_team_names.py
    ```
 
 2.	**Build datasets and split into train/test**
    ```
-   python scripts_data_process/build_all_pipelines.py --pipelines all
+   python scripts_data_process/build_all_pipelines.py --pipelines all 
    python scripts_data_process/build_splits.py --pipeline all
    ```
 
