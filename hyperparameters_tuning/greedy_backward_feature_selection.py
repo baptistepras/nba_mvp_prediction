@@ -8,10 +8,12 @@ from sklearn.linear_model import LogisticRegression
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(BASE_DIR)
 from train_models import load_dataset, get_default_hyperparams, evaluate_model
-from train_models import PIPELINE_ALIASES, PIPELINE_GROUPS, MODEL_CLASSES, MAX_YEAR
+from train_models import PIPELINE_ALIASES, PIPELINE_GROUPS, MODEL_CLASSES
 from hyperparameters_tuning.feature_selection import compute_recall_at_1_avg
 from train_models import load_dataset as original_load_dataset
 import train_models
+
+MAX_YEAR = 2025
 
 _data_cache = {}
 

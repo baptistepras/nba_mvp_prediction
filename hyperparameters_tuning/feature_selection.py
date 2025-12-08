@@ -10,8 +10,9 @@ from sklearn.linear_model import LogisticRegression
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(BASE_DIR)
 from train_models import load_dataset, get_default_hyperparams, evaluate_model
-from train_models import PIPELINE_ALIASES, PIPELINE_GROUPS, MODEL_CLASSES, MAX_YEAR
+from train_models import PIPELINE_ALIASES, PIPELINE_GROUPS, MODEL_CLASSES
 
+MAX_YEAR = 2025
 
 def compute_recall_at_1_avg(model_class, fixed_params, dataset_dir, start_year, end_year, feature_indices):
     """

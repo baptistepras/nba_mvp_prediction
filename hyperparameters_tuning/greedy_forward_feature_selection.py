@@ -12,6 +12,8 @@ from train_models import PIPELINE_ALIASES, PIPELINE_GROUPS, MODEL_CLASSES, MAX_Y
 from hyperparameters_tuning.feature_selection import compute_recall_at_1_avg
 
 
+MAX_YEAR = 2025
+
 def greedy_forward_selection(model_class, dataset_dir, pipeline_name, fixed_params,
                               output_dir, year_start, year_end, patience=3):
     """
