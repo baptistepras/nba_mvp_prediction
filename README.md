@@ -33,7 +33,7 @@ Use the project from `notebook.ipynb` by using the modules imported at the begin
 
 See below for some examples (not exhaustive, there are many more possibilities of parameters and modules to be used).
 
-Note to future people: if you are using this project after 2026 and want to include new data,change the parameter `MAX_YEAR = 2026` in `train_models.py` before.
+Note to future people: if you are using this project after 2026 and want to include new data,change the parameter `MAX_YEAR = 2026` in all the files before.
 
 1. **Download and preprocess raw data**  
    ```
