@@ -1,8 +1,10 @@
 # 🏀 NBA MVP Prediction
 
-This project aims to predict the **NBA Most Valuable Player (MVP)** of a given season using player and team statistics.  
-The pipeline covers data collection, preprocessing, dataset building, model training, and evaluation.  
-Multiple machine learning models are implemented and compared, with performance metrics reported to assess prediction quality.
+Predicts the NBA Most Valuable Player of a season from player and team statistics. The pipeline covers data collection, preprocessing, dataset building, model training and evaluation, and compares several machine learning models.
+
+<p align="center">
+  <img src="images/model_performance_comparison.png" alt="Performance of the models" width="80%">
+</p>
 
 ---
 
@@ -86,3 +88,9 @@ Available <model_name> options:
    ```
 
 To make a prediction on the current year (on any year at all), use `pr.main("all1980", model="logreg", year=2026)`.
+
+---
+
+## Authors
+
+Baptiste Pras and Eloi Beurtheret.
